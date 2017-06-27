@@ -50,7 +50,7 @@ def on_message(message):
                 if len(tdata.params) > 0:
                     for param in tdata.params:
                         paramm = param.split(" ")
-                        params += "`" + paramm.pop(0) + ":` " + " ".join(paramm).strip() + "\n"
+                        params += "`" + paramm.pop(0) + "`: " + " ".join(paramm).strip() + "\n"
                 em = discord.Embed(title=tdata.group, description=link, color=color)
                 if tdata.typec.lower() == "function":
                     em.add_field(name="Declaration", value="```Cpp\n" + tdata.extra + " " + tdata.name + "\n```")
@@ -76,10 +76,14 @@ def on_message(message):
                 if matches[m].typec.lower() == "macro":
                     fname = "`#define " + matches[m].name + " " + matches[m].extra + "`"
                 flink = "*[" +  u"\u279A" + "](" + matches[m].link + ")*"
-                fdes = flink + "\n" + matches[m].description
-                em.add_field(name=fname, value=fdes)
+                fdes = ""
+                if len(matches[m].description) <= 175:
+                    fdes = matches[m].description
+                else:
+                    fdes = matches[m].description[:189] + " . . ."
+                em.add_field(name=fname, value=fdes + " " + flink)
             if len(matches) is 0:
-                em.add_field(name="None Found")
+                em.add_field(name="None", value="No matches for " + c + " found.")
             yield from client.send_message(message.channel, embed=em)
         if result != None and result != "":
             yield from client.send_message(message.channel, result)
