@@ -3,6 +3,7 @@ import asyncio
 import re
 from time import gmtime, strftime
 from parseAPI import Data, load
+from search import *
 
 with open('../pros_token.txt', 'r') as discord_file:
     DISCORD_TOKEN = discord_file.read()[:-2]
@@ -15,9 +16,6 @@ base = "https://pros.cs.purdue.edu/"
 tutorial = base + "tutorials/"
 api = base + "api/#"
 data = load()
-
-def reContains(regex, string):
-    return bool(re.search(regex, string))
 
 @client.event
 @asyncio.coroutine
@@ -32,6 +30,8 @@ def on_ready():
 @asyncio.coroutine
 def on_message(message):
     global data, prefix, client, base, tutorial, api
+    if len(message.content) <= 0:
+        return
     content = message.content[1:]
     if message.content[0] == prefix:
         result = ""
@@ -69,17 +69,13 @@ def on_message(message):
             result = "<" + tutorial + c + ">"
         elif content.startswith("f "):
             c = content[2:].lower()
-            matches = []
-            for d in data:
-                if reContains(c, d.access) or reContains(c, d.description.lower()):
-                    if len(d.name) > 1 and len(d.description) > 1:
-                        matches.append(d)
+            matches = search(c)
             em = discord.Embed(title="Matches for `" + c + "`", color=color)
             for m in range(len(matches)):
                 fname = "`" + matches[m].extra + " " + matches[m].name + "`"
-                if matches[m].typec == "macro":
-                    fname = "`#define " + matches[m].name + matches[m].extra + "`"
-                flink = "*[link](" + matches[m].link + ")*"
+                if matches[m].typec.lower() == "macro":
+                    fname = "`#define " + matches[m].name + " " + matches[m].extra + "`"
+                flink = "*[" +  u"\u279A" + "](" + matches[m].link + ")*"
                 fdes = flink + "\n" + matches[m].description
                 em.add_field(name=fname, value=fdes)
             if len(matches) is 0:
