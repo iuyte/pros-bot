@@ -84,7 +84,7 @@ def on_message(message):
                 em.add_field(name=fname, value=fdes + " " + flink)
             if len(matches) is 0:
                 em.add_field(name="None", value="No matches for " + c + " found.")
-            yield from client.send_message(message.channel, embed=em)
+            yield from client.send_message(message.author, embed=em)
         if result != None and result != "":
             yield from client.send_message(message.channel, result)
     data = load()
