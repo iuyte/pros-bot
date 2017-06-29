@@ -11,7 +11,8 @@ def search(regex):
     data = load()
     for d in data:
         if len(d.name) > 1 and len(d.description) > 1:
-            if r.match(d.access) or r.match(d.description.lower()):
+            # print(regex + "=|=" + d.access + ";")
+            if bool(r.search(d.access.strip())) or regex == d.access.strip():
                 matches.append(d)
     return matches
 

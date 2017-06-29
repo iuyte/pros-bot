@@ -1,6 +1,7 @@
 import discord
 import asyncio
 import re
+import vegan
 from time import gmtime, strftime
 from parseAPI import Data, load
 from search import *
@@ -33,16 +34,19 @@ def on_message(message):
     if len(message.content) <= 0:
         return
     content = message.content[1:]
-    if message.content[0] == prefix or client.user in message.mentions:
+    if message.content[0] == prefix or client.user in message.mentions or message.channel.is_private:
         if client.user in message.mentions:
             content = " ".join(message.content.split("<@" + str(client.user.id) + ">")).strip()
+        if message.channel.is_private:
+            content = message.content
         result = ""
-        if content.startswith("api "):
+        if content.startswith("api vegan"):
+            em = discord.Embed(title="Vegan Counter", description="How many times Jess has said 'vegan'", color=color)
+            em.add_field(name="Total Count", value="**[" + str(vegan.count()) + "]()**")
+            yield from client.send_message(message.channel, embed=em)
+        elif content.startswith("api "):
             c = " ".join(content.split(" ")[1:]).strip()
-            tdata = None
-            for i in range(len(data)):
-                if data[i].access == c.lower():
-                    tdata = data[i]
+            tdata = search(c)[0]
             if tdata == None:
                 result = "Not found"
             else:
@@ -65,7 +69,8 @@ def on_message(message):
                     em.add_field(name="Declaration", value="```Cpp\n#define " + tdata.name + " " + tdata.extra + "\n```")
                     em.add_field(name="Description", value=tdata.description)
                 if em != None:
-                    yield from client.send_message(message.channel, embed=em)
+                    if len(str(em.to_dict())) <= 2000:
+                        yield from client.send_message(message.channel, embed=em)
         elif content.startswith("tutorial "):
             c = content[9:].strip()
             result = "<" + tutorial + c + ">"
@@ -83,7 +88,7 @@ def on_message(message):
                     fdes = matches[m].description
                 else:
                     fdes = matches[m].description[:189] + " . . ."
-                em.add_field(name=fname, value=fdes + " " + flink)
+                em.add_field(name=fname, value=fdes + " " + flink, inline=True)
             if len(matches) is 0:
                 em.add_field(name="None", value="No matches for " + c + " found.")
             yield from client.send_message(message.author, embed=em)
@@ -97,6 +102,9 @@ def on_message(message):
             yield from client.send_message(message.author, embed=em)
         if result != None and result != "":
             yield from client.send_message(message.channel, result)
+    elif str(message.author.id) == "168643881066299392":
+        for i in range(message.content.lower().count("vegan")):
+            vegan.add()
     data = load()
 
 client.run(DISCORD_TOKEN)

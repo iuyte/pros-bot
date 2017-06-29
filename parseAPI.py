@@ -35,9 +35,17 @@ def parse(data):
         cdef = ""
         params = []
         returns = ""
-        types = ["int", "TaskHandle", "void", "bool", "unsigned long", "unsigned int", "Encoder", "Gyro", "Ultrasonic", "typedef"]
+        types = ["typedef void *", "TaskHandle", "bool", "unsigned long", "unsigned int", "Encoder", "Gyro", "Ultrasonic", "typedef", "FILE*", "char*", "char", "FILE *", "FILE", "size_t", "long int", "void *", "void*", "Semaphore", "Mutex", "void", "int"]
+        skip = ["#if", "#end", "}", "\n"]
         while line < len(data):
             try:
+                bskip = False
+                for s in skip:
+                    if data[line].startswith(s):
+                        bskip = True
+                if bskip:
+                    line += 1
+                    continue
                 if data[line].startswith("// -"):
                         group = ""
                         for character in data[line]:
@@ -66,25 +74,36 @@ def parse(data):
                                 else:
                                         cdef += data[line][3:] + " "
                                 line += 1
-                        cdef.strip()
+                        cdef = cdef.strip()
+                        returns = returns.strip()
                         line += 1
                         continue
                 if data[line].startswith("#define "):
                         typec = "Macro"
                         vi = data[line].split(" ")
-                        name = vi[1]
-                        value = vi[2]
+                        name = vi[1].strip()
+                        value = vi[2].strip()
                         out.append(Data(typec, group, name, cdef, params, value, name.lower()))
+                        cdef = ""
+                        params = ""
                         line += 1
                         continue
                 typec = "Function"
                 rtype = ""
                 for t in types:
-                        if data[line].startswith(t):
+                        if data[line].lower().startswith(t.lower()):
                                 rtype = t
-                name = data[line][(len(rtype) + 1):-1]
-                access = name.split("(")[0].lower()
+                                break
+                name = data[line][(len(rtype) + 1):-1].strip()
+                access = name.split("(")[0].lower().strip()
+                if rtype == "" or cdef == "" or name == "" or access.strip() in types or access.startswith("int "):
+                    line += 1
+                    continue
                 out.append(Data(typec, group, name, cdef, params, rtype, access, returns))
+                # print(" ;".join([data[line], name, access, rtype, returns]))
+                cdef = ""
+                params = []
+                returns = ""
                 line += 1
             except:
                 line += 1
