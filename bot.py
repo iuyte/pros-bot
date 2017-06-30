@@ -4,6 +4,7 @@ import re
 import vegan
 from time import gmtime, strftime
 from parseAPI import Data, load
+from unidecode import unidecode
 from search import *
 
 with open('../pros_token.txt', 'r') as discord_file:
@@ -30,7 +31,7 @@ def on_ready():
 @client.event
 @asyncio.coroutine
 def on_message(message):
-    global data, prefix, client, base, tutorial, api
+    global data, prefix, client, base, tutorial, api, foo
     if len(message.content) <= 0:
         return
     content = message.content[1:]
@@ -40,36 +41,40 @@ def on_message(message):
         if message.channel.is_private:
             content = message.content
         result = ""
-        if content.startswith("api vegan"):
-            em = discord.Embed(title="Vegan Counter", description="How many times Jess has said 'vegan'", color=color)
-            em.add_field(name="Total Count", value="**[" + str(vegan.count()) + "]()**")
-            yield from client.send_message(message.channel, embed=em)
-        elif content.startswith("api "):
-            c = " ".join(content.split(" ")[1:]).strip()
-            tdata = search(c)[0]
-            if tdata == None:
-                result = "Not found"
+        if content.startswith("api "):
+            c = content.split(" ")[1].strip()
+            tdata = None
+            if "vegan" in c:
+                em = discord.Embed(title="Vegan Counter", description="How many times Jess has said 'vegan'", color=color)
+                em.add_field(name="Total Count", value="**[" + str(vegan.count()) + "]()**")
+                yield from client.send_message(message.channel, embed=em)
             else:
-                result = ""
-                link = "**[PROS API Reference](" + tdata.link + ")**"
-                params = ""
-                if len(tdata.params) > 0:
-                    for param in tdata.params:
-                        paramm = param.split(" ")
-                        params += "`" + paramm.pop(0) + "`: " + " ".join(paramm).strip() + "\n"
-                em = discord.Embed(title=tdata.group, description=link, color=color)
-                if tdata.typec.lower() == "function":
-                    em.add_field(name="Declaration", value="```Cpp\n" + tdata.extra + " " + tdata.name + "\n```")
-                    em.add_field(name="Description", value=tdata.description)
+                try:
+                    tdata = search(c)[0]
+                except:
+                    tdata = None
+                if tdata == None:
+                    result = "Not found"
+                else:
+                    result = ""
+                    link = "**[PROS API Reference](" + tdata.link + ")**"
+                    params = ""
                     if len(tdata.params) > 0:
-                        em.add_field(name="Parameters", value=params)
-                    if tdata.returns is not "":
-                        em.add_field(name="Returns", value = tdata.returns)
-                elif tdata.typec.lower() == "macro":
-                    em.add_field(name="Declaration", value="```Cpp\n#define " + tdata.name + " " + tdata.extra + "\n```")
-                    em.add_field(name="Description", value=tdata.description)
-                if em != None:
-                    if len(str(em.to_dict())) <= 2000:
+                        for param in tdata.params:
+                            paramm = param.split(" ")
+                            params += "`" + paramm.pop(0) + "`: " + " ".join(paramm).strip() + "\n"
+                    em = discord.Embed(title=tdata.group, description=link, color=color)
+                    if tdata.typec.lower() == "function":
+                        em.add_field(name="Declaration", value="```Cpp\n" + tdata.extra + " " + tdata.name + "\n```")
+                        em.add_field(name="Description", value=tdata.description)
+                        if len(tdata.params) > 0:
+                            em.add_field(name="Parameters", value=params)
+                        if tdata.returns is not "":
+                            em.add_field(name="Returns", value = tdata.returns)
+                    elif tdata.typec.lower() == "macro":
+                        em.add_field(name="Declaration", value="```Cpp\n#define " + tdata.name + " " + tdata.extra + "\n```")
+                        em.add_field(name="Description", value=tdata.description)
+                    if em != None:
                         yield from client.send_message(message.channel, embed=em)
         elif content.startswith("tutorial "):
             c = content[9:].strip()
@@ -87,7 +92,7 @@ def on_message(message):
                 if len(matches[m].description) <= 175:
                     fdes = matches[m].description
                 else:
-                    fdes = matches[m].description[:189] + " . . ."
+                    fdes = matches[m].description[:169] + " . . ."
                 em.add_field(name=fname, value=fdes + " " + flink, inline=True)
             if len(matches) is 0:
                 em.add_field(name="None", value="No matches for " + c + " found.")
