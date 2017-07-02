@@ -60,13 +60,13 @@ async def on_message(message):
                     params = ""
                     if len(g(tdata, "params")) > 0:
                         for param in g(tdata, "params"):
-                            paramm = param.split(" ")
+                            paramm = param.decode('utf-8').split(" ")
                             params += "`" + paramm.pop(0) + "`: " + " ".join(paramm).strip() + "\n"
                     em = discord.Embed(title=g(tdata, "group"), description=link, color=color)
                     if g(tdata, "typec").lower() == "function":
                         em.add_field(name="Declaration", value="```Cpp\n" + g(tdata, "extra") + " " + g(tdata, "name") + "\n```")
                         if len(g(tdata, "description")) >  1024:
-                            g(tdata, "description") = g(tdata, "description")[:1018] + " . . ."
+                            tdata[bytes("description", 'utf-8')] = g(tdata, "description")[:1018] + " . . ."
                         em.add_field(name="Description", value=g(tdata, "description"))
                         if len(g(tdata, "params")) > 0:
                             em.add_field(name="Parameters", value=params)
