@@ -10,8 +10,7 @@ def search(regex):
     r = re.compile(eval("r'" + regex + "'"))
     data = load()
     for d in data:
-        if len(d["name"]) > 1 and len(d["description"]) > 1:
-            if bool(r.search(d["access"].strip())) or regex == d["access"].strip():
+        if len(d[b"name"]) > 1 and len(d[b"description"]) > 1:
+            if bool(r.search(d[b"access"].strip())) or regex == d[b"access"].strip():
                 matches.append(d)
     return matches
-
