@@ -5,6 +5,7 @@ import re
 import vegan
 from time import gmtime, strftime
 from parseAPI import load
+from parseAPI import gData as g
 from search import *
 
 with open('../pros_token.txt', 'r') as discord_file:
@@ -55,7 +56,7 @@ async def on_message(message):
                     result = "Not found"
                 else:
                     result = ""
-                    link = "**[PROS API Reference](" + tdata["link"] + ")**"
+                    link = "**[PROS API Reference](" + g(tdata, "link") + ")**"
                     params = ""
                     if len(tdata["params"]) > 0:
                         for param in tdata["params"]:

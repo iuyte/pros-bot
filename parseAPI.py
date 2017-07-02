@@ -144,6 +144,10 @@ def load():
                 data = pickle.load(p)
         return data
 
+def gData(data, key):
+    key = bytes(key, 'utf-8')
+    return data[key].decode('utf-8')
+
 if __name__ == "__main__":
         save()
         print("Saved.")
