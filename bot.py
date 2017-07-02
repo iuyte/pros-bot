@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import discord
 import asyncio
 import re
