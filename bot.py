@@ -58,23 +58,23 @@ async def on_message(message):
                     result = ""
                     link = "**[PROS API Reference](" + g(tdata, "link") + ")**"
                     params = ""
-                    if len(tdata["params"]) > 0:
-                        for param in tdata["params"]:
+                    if len(g(tdata, "params")) > 0:
+                        for param in g(tdata, "params"):
                             paramm = param.split(" ")
                             params += "`" + paramm.pop(0) + "`: " + " ".join(paramm).strip() + "\n"
-                    em = discord.Embed(title=tdata["group"], description=link, color=color)
-                    if tdata["typec"].lower() == "function":
-                        em.add_field(name="Declaration", value="```Cpp\n" + tdata["extra"] + " " + tdata["name"] + "\n```")
-                        if len(tdata["description"]) >  1024:
-                            tdata["description"] = tdata["description"][:1018] + " . . ."
-                        em.add_field(name="Description", value=tdata["description"])
-                        if len(tdata["params"]) > 0:
+                    em = discord.Embed(title=g(tdata, "group"), description=link, color=color)
+                    if g(tdata, "typec").lower() == "function":
+                        em.add_field(name="Declaration", value="```Cpp\n" + g(tdata, "extra") + " " + g(tdata, "name") + "\n```")
+                        if len(g(tdata, "description")) >  1024:
+                            g(tdata, "description") = g(tdata, "description")[:1018] + " . . ."
+                        em.add_field(name="Description", value=g(tdata, "description"))
+                        if len(g(tdata, "params")) > 0:
                             em.add_field(name="Parameters", value=params)
-                        if tdata["returns"] is not "":
-                            em.add_field(name="Returns", value = tdata["returns"])
-                    elif tdata["typec"].lower() == "macro":
-                        em.add_field(name="Declaration", value="```Cpp\n#define " + tdata["name"] + " " + tdata["extra"] + "\n```")
-                        em.add_field(name="Description", value=tdata["description"])
+                        if g(tdata, "returns") is not "":
+                            em.add_field(name="Returns", value = g(tdata, "returns"))
+                    elif g(tdata, "typec").lower() == "macro":
+                        em.add_field(name="Declaration", value="```Cpp\n#define " + g(tdata, "name") + " " + g(tdata, "extra") + "\n```")
+                        em.add_field(name="Description", value=g(tdata, "description"))
                     if em != None:
                         await client.send_message(message.channel, embed=em)
         elif content.startswith("tutorial "):
@@ -85,15 +85,15 @@ async def on_message(message):
             matches = search(c)
             em = discord.Embed(title="Matches for `" + c + "`", color=color)
             for m in range(len(matches)):
-                fname = "`" + matches[m]["extra"] + " " + matches[m]["name"] + "`"
-                if matches[m]["typec"].lower() == "macro":
-                    fname = "`#define " + matches[m]["name"] + " " + matches[m]["extra"] + "`"
-                flink = "*[" +  u"\u279A" + "](" + matches[m]["link"] + ")*"
+                fname = "`" + g(matches[m], "extra") + " " + g(matches[m], "name") + "`"
+                if g(matches[m], "typec").lower() == "macro":
+                    fname = "`#define " + g(matches[m], "name") + " " + g(matches[m], "extra") + "`"
+                flink = "*[" +  u"\u279A" + "](" + g(matches[m], "link") + ")*"
                 fdes = ""
-                if len(matches[m]["description"]) <= 175:
-                    fdes = matches[m]["description"]
+                if len(g(matches[m], "description")) <= 175:
+                    fdes = g(matches[m], "description")
                 else:
-                    fdes = matches[m]["description"][:169] + " . . ."
+                    fdes = g(matches[m], "description")[:169] + " . . ."
                 em.add_field(name=fname, value=fdes + " " + flink, inline=True)
             if len(matches) is 0:
                 em.add_field(name="None", value="No matches for " + c + " found.")
