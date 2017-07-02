@@ -35,7 +35,7 @@ def parse(data):
         cdef = ""
         params = []
         returns = ""
-        types = ["typedef void *", "TaskHandle", "bool", "unsigned long", "unsigned int", "Encoder", "Gyro", "Ultrasonic", "typedef", "FILE*", "char*", "char", "FILE *", "FILE", "size_t", "long int", "void *", "void*", "Semaphore", "Mutex", "void", "int"]
+        types = ["typedef void *", "TaskHandle", "bool", "unsigned long", "unsigned int", "Encoder", "Gyro", "Ultrasonic", "typedef", "FILE*", "char*", "char", "FILE *", "FILE", "size_t", "long int", "void *", "void*", "Semaphore", "Mutex", "void", "int", "PROS_FILE*", "PROS_FILE *", "PROS_FILE"]
         skip = ["#if", "#end", "}", "\n"]
         while line < len(data):
             try:
