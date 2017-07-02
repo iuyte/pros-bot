@@ -1,7 +1,8 @@
-import pickle
+import msgpack as pickle
 
+"""
 class Data:
-        """The data of an API reference"""
+        The data of an API reference""
 
         typec = ''
         group = ''
@@ -27,6 +28,27 @@ class Data:
                 elif typec.lower() == "macro":
                         self.link = "https://pros.cs.purdue.edu/api/#define-"
                         self.link += "-".join(self.name.split("(")[0].split("_")).lower() + "-" + self.extra
+
+class DataSerializer(serpy.Serializer):
+        typec = serpy.Field()
+        group = serpy.Field()
+        name = serpy.Field()
+        description = serpy.Field()
+        params = serpy.Field()
+        extra = serpy.Field()
+        access = serpy.Field()
+        returns = serpy.Field()
+        link = serpy.Field()
+"""
+
+def Data(typec, group, name, description, params, extra="", access="", returns=""):
+        link = ""
+        if typec.lower() == "function":
+                link = "https://pros.cs.purdue.edu/api/#" + name.split("(")[0]
+        elif typec.lower() == "macro":
+                link = "https://pros.cs.purdue.edu/api/#define-"
+                link += "-".join(name.split("(")[0].split("_")).lower() + "-" + extra
+        return {"typec": typec, "group": group, "name": name, "description": description, "params": params, "extra": extra, "access": access, "returns":returns}
 
 def parse(data):
         out = []
@@ -100,7 +122,6 @@ def parse(data):
                     line += 1
                     continue
                 out.append(Data(typec, group, name, cdef, params, rtype, access, returns))
-                # print(" ;".join([data[line], name, access, rtype, returns]))
                 cdef = ""
                 params = []
                 returns = ""
