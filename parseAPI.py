@@ -1,32 +1,13 @@
-import pickle
+import umsgpack as pickle
 
-class Data:
-        """The data of an API reference"""
-
-        typec = ''
-        group = ''
-        name = ''
-        description = ''
-        params = []
-        extra = None
-        access = ""
-        returns = ""
+def Data(typec, group, name, description, params, extra="", access="", returns=""):
         link = ""
-        
-        def __init__(self, typec, group, name, description, params, extra=None, access="", returns=""):
-                self.typec = typec
-                self.group = group
-                self.name = name
-                self.description = description
-                self.params = params
-                self.returns = returns
-                self.extra = extra
-                self.access = access
-                if typec.lower() == "function":
-                        self.link = "https://pros.cs.purdue.edu/api/#" + name.split("(")[0]
-                elif typec.lower() == "macro":
-                        self.link = "https://pros.cs.purdue.edu/api/#define-"
-                        self.link += "-".join(self.name.split("(")[0].split("_")).lower() + "-" + self.extra
+        if typec.lower() == "function":
+                link = "https://pros.cs.purdue.edu/api/#" + name.split("(")[0]
+        elif typec.lower() == "macro":
+                link = "https://pros.cs.purdue.edu/api/#define-"
+                link += "-".join(name.split("(")[0].split("_")).lower() + "-" + extra
+        return {"typec": typec, "group": group, "name": name, "description": description, "params": params, "extra": extra, "access": access, "returns": returns, "link": link}
 
 def parse(data):
         out = []
@@ -35,7 +16,7 @@ def parse(data):
         cdef = ""
         params = []
         returns = ""
-        types = ["typedef void *", "TaskHandle", "bool", "unsigned long", "unsigned int", "Encoder", "Gyro", "Ultrasonic", "typedef", "FILE*", "char*", "char", "FILE *", "FILE", "size_t", "long int", "void *", "void*", "Semaphore", "Mutex", "void", "int"]
+        types = ["typedef void *", "TaskHandle", "bool", "unsigned long", "unsigned int", "Encoder", "Gyro", "Ultrasonic", "typedef", "FILE*", "char*", "char", "FILE *", "FILE", "size_t", "long int", "void *", "void*", "Semaphore", "Mutex", "void", "int", "PROS_FILE*", "PROS_FILE *", "PROS_FILE"]
         skip = ["#if", "#end", "}", "\n"]
         while line < len(data):
             try:
@@ -95,12 +76,14 @@ def parse(data):
                                 rtype = t
                                 break
                 name = data[line][(len(rtype) + 1):-1].strip()
+                while name.strip()[-1] is not ";":
+                    line += 1
+                    name += " " + data[line].strip()
                 access = name.split("(")[0].lower().strip()
                 if rtype == "" or cdef == "" or name == "" or access.strip() in types or access.startswith("int "):
                     line += 1
                     continue
                 out.append(Data(typec, group, name, cdef, params, rtype, access, returns))
-                # print(" ;".join([data[line], name, access, rtype, returns]))
                 cdef = ""
                 params = []
                 returns = ""
@@ -123,7 +106,12 @@ def load():
                 data = pickle.load(p)
         return data
 
+def gData(data, key):
+    key = bytes(key, 'utf-8')
+    if type(data[key]) is bytes:
+        return data[key].decode('utf-8')
+    return data[key]
+
 if __name__ == "__main__":
         save()
         print("Saved.")
-
