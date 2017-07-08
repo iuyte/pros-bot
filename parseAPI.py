@@ -76,7 +76,7 @@ def parse(data):
                                 rtype = t
                                 break
                 name = data[line][(len(rtype) + 1):-1].strip()
-                while name.strip()[-1] is not ";":
+                while data[line].strip()[-1] is not ";":
                     line += 1
                     name += " " + data[line].strip()
                 access = name.split("(")[0].lower().strip()
