@@ -1,46 +1,5 @@
 import umsgpack as pickle
 
-"""
-class Data:
-        The data of an API reference""
-
-        typec = ''
-        group = ''
-        name = ''
-        description = ''
-        params = []
-        extra = None
-        access = ""
-        returns = ""
-        link = ""
-
-        def __init__(self, typec, group, name, description, params, extra=None, access="", returns=""):
-                self.typec = typec
-                self.group = group
-                self.name = name
-                self.description = description
-                self.params = params
-                self.returns = returns
-                self.extra = extra
-                self.access = access
-                if typec.lower() == "function":
-                        self.link = "https://pros.cs.purdue.edu/api/#" + name.split("(")[0]
-                elif typec.lower() == "macro":
-                        self.link = "https://pros.cs.purdue.edu/api/#define-"
-                        self.link += "-".join(self.name.split("(")[0].split("_")).lower() + "-" + self.extra
-
-class DataSerializer(serpy.Serializer):
-        typec = serpy.Field()
-        group = serpy.Field()
-        name = serpy.Field()
-        description = serpy.Field()
-        params = serpy.Field()
-        extra = serpy.Field()
-        access = serpy.Field()
-        returns = serpy.Field()
-        link = serpy.Field()
-"""
-
 def Data(typec, group, name, description, params, extra="", access="", returns=""):
         link = ""
         if typec.lower() == "function":
@@ -117,6 +76,9 @@ def parse(data):
                                 rtype = t
                                 break
                 name = data[line][(len(rtype) + 1):-1].strip()
+                while name.strip()[-1] is not ";":
+                    line += 1
+                    name += " " + data[line].strip()
                 access = name.split("(")[0].lower().strip()
                 if rtype == "" or cdef == "" or name == "" or access.strip() in types or access.startswith("int "):
                     line += 1
