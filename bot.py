@@ -49,11 +49,7 @@ async def on_message(message):
         result = ""
         ment = message.mentions
         o = message.channel
-        oo = False
-        for role in authorizedList:
-            if role in message.author.roles:
-                oo = True
-        if oo:
+        if len([role for role in authorizedList if role in message.author.roles]) > 0:
             if len(ment) > 0 and client.user not in ment:
                 o = ment[0]
             elif len(ment) > 1 and client.user in ment:
