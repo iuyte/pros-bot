@@ -45,6 +45,7 @@ async def on_message(message):
         if message.channel.is_private:
             content = message.content
         result = ""
+        ment = message.mentions
         o = message.channel
         if len(ment) > 0 and client.user not in ment:
             o = ment[0]
