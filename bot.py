@@ -22,7 +22,7 @@ api = base + "api/#"
 data = load()
 
 def epoch():
-    seed(str(Epoch()))
+    seed(str(float(Epoch())))
     return str(float(Epoch()))
 
 @client.event
