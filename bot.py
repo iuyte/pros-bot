@@ -21,6 +21,8 @@ tutorial = base + "tutorials/"
 api = base + "api/#"
 data = load()
 
+authorizedList = ["PROS", "Developers", "Admins"]
+
 def epoch():
     seed(str(float(Epoch())))
     return str(float(Epoch()))
@@ -47,10 +49,15 @@ async def on_message(message):
         result = ""
         ment = message.mentions
         o = message.channel
-        if len(ment) > 0 and client.user not in ment:
-            o = ment[0]
-        elif len(ment) > 1 and client.user in ment:
-            o = ment[1]
+        oo = False
+        for role in authorizedList:
+            if role in message.author.roles:
+                oo = True
+        if oo:
+            if len(ment) > 0 and client.user not in ment:
+                o = ment[0]
+            elif len(ment) > 1 and client.user in ment:
+                o = ment[1]
         if content.startswith("api "):
             ment = message.mentions
             o = message.channel
