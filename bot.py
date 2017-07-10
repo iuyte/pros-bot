@@ -45,13 +45,24 @@ async def on_message(message):
         if message.channel.is_private:
             content = message.content
         result = ""
+        o = message.channel
+        if len(ment) > 0 and client.user not in ment:
+            o = ment[0]
+        elif len(ment) > 1 and client.user in ment:
+            o = ment[1]
         if content.startswith("api "):
+            ment = message.mentions
+            o = message.channel
+            if len(ment) > 0 and client.user not in ment:
+                o = ment[0]
+            elif len(ment) > 1 and client.user in ment:
+                o = ment[1]
             c = content.split(" ")[1].strip()
             tdata = None
             if "vegan" in c:
                 em = discord.Embed(title="Vegan Counter", description="How many times Jess has said 'vegan'", color=color)
                 em.add_field(name="Total Count", value="**[" + str(vegan.count()) + "]()**")
-                await client.send_message(message.channel, embed=em)
+                await client.send_message(o, embed=em)
             else:
                 try:
                     tdata = search(c)[0]
@@ -81,11 +92,13 @@ async def on_message(message):
                         em.add_field(name="Declaration", value="```Cpp\n#define " + g(tdata, "name") + " " + g(tdata, "extra") + "\n```")
                         em.add_field(name="Description", value=g(tdata, "description"))
                     if em != None:
-                        await client.send_message(message.channel, embed=em)
+                        await client.send_message(o, embed=em)
         elif content.startswith("tutorial "):
             c = content[9:].strip()
             result = "<" + tutorial + c + ">"
         elif content.startswith("f "):
+            if o is message.channel:
+                o = message.author
             c = content[2:].lower().strip()
             matches = search(c)
             em = discord.Embed(title="Matches for `" + c + "`", color=color)
@@ -103,19 +116,21 @@ async def on_message(message):
             if len(matches) is 0:
                 em.add_field(name="None", value="No matches for " + c + " found.")
             await client.send_message(message.author, embed=em)
-        elif content.lower().startswith("epoch") or content.lower().startswith("time") or content.lower.startswith("unix"):
+        elif content.lower().startswith("epoch") or content.lower().startswith("time") or content.lower().startswith("unix"):
             em = discord.Embed(title="Current Time", description=epoch(), color=discord.Color(randint(0, 16777215)))
-            await client.send_message(message.channel, embed=em)
+            await client.send_message(o, embed=em)
         elif content.lower().strip().startswith("help"):
+            if o is message.channel:
+                o = message.author
             em = discord.Embed(title="Help", description="About the available commands", color=color)
             em.add_field(name="`$`", value="Use the prefix `$` or mention me at the beginning of a message that has a command.")
             em.add_field(name="`api`", value="Use the command `api <function/macro>` to get information on a function or macro.")
             em.add_field(name="`tutorial`", value="Use the command `tutorial <tutorial> to get a link to a PROS tutorial.")
             em.add_field(name="`f`", value="Use `f <regex>` to search the API using a regex for specific functions/macros.")
             em.add_field(name="help", value="Display this (hopefully helpful) message")
-            await client.send_message(message.author, embed=em)
+            await client.send_message(o, embed=em)
         if result != None and result != "":
-            await client.send_message(message.channel, result)
+            await client.send_message(o, result)
     elif str(message.author.id) == "168643881066299392":
         for i in range(message.content.lower().count("vegan")):
             vegan.add()
