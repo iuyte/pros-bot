@@ -3,7 +3,8 @@ import discord
 import asyncio
 import re
 import vegan
-from time import gmtime, strftime
+from time import gmtime, strftime, time as Epoch
+from random import randint
 from parseAPI import load
 from parseAPI import gData as g
 from search import *
@@ -19,6 +20,9 @@ base = "https://pros.cs.purdue.edu/"
 tutorial = base + "tutorials/"
 api = base + "api/#"
 data = load()
+
+def epoch():
+    return str(float(Epoch()))
 
 @client.event
 async def on_ready():
@@ -98,6 +102,9 @@ async def on_message(message):
             if len(matches) is 0:
                 em.add_field(name="None", value="No matches for " + c + " found.")
             await client.send_message(message.author, embed=em)
+        elif content.lower().startswith("epoch") or content.lower().startswith("time") or content.lower.startswith("unix"):
+            em = discord.Embed(title="Current Time", color=discord.Color(randint(0, 16777215)), description=epoch())
+            await client.send_message(message.channel, embed=em)
         elif content.lower().strip().startswith("help"):
             em = discord.Embed(title="Help", description="About the available commands", color=color)
             em.add_field(name="`$`", value="Use the prefix `$` or mention me at the beginning of a message that has a command.")
