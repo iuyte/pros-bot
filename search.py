@@ -1,5 +1,6 @@
 import re
-from parseAPI import Data, load
+from parseAPI import load
+from parseAPI import gData as g
 
 def reContains(regex, string):
     return bool(re.search(regex, string))
@@ -10,9 +11,7 @@ def search(regex):
     r = re.compile(eval("r'" + regex + "'"))
     data = load()
     for d in data:
-        if len(d.name) > 1 and len(d.description) > 1:
-            # print(regex + "=|=" + d.access + ";")
-            if bool(r.search(d.access.strip())) or regex == d.access.strip():
+        if len(g(d, "name")) > 1 and len(g(d, "description")) > 1:
+            if bool(r.search(g(d, "access").strip())) or regex == g(d, "access").strip():
                 matches.append(d)
     return matches
-

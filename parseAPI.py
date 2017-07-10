@@ -1,4 +1,5 @@
 import umsgpack as pickle
+import jsonpickle
 
 def Data(typec, group, name, description, params, extra="", access="", returns=""):
         link = ""
@@ -76,7 +77,7 @@ def parse(data):
                                 rtype = t
                                 break
                 name = data[line][(len(rtype) + 1):-1].strip()
-                while name.strip()[-1] is not ";":
+                while data[line].strip()[-1] is not ";":
                     line += 1
                     name += " " + data[line].strip()
                 access = name.split("(")[0].lower().strip()
@@ -99,6 +100,8 @@ def save():
                 data = parse(theta.read().split("\n"))
         with open("api.p", mode="wb") as thata:
                 pickle.dump(data, thata)
+        with open("api.json", mode="w") as jsonf:
+                jsonf.write(jsonpickle.encode(data, unpicklable=False));
 
 def load():
         data = []
