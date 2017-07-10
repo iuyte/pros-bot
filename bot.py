@@ -4,7 +4,7 @@ import asyncio
 import re
 import vegan
 from time import gmtime, strftime, time as Epoch
-from random import randint
+from random import randint, seed
 from parseAPI import load
 from parseAPI import gData as g
 from search import *
@@ -22,6 +22,7 @@ api = base + "api/#"
 data = load()
 
 def epoch():
+    seed(float(Epoch))
     return str(float(Epoch()))
 
 @client.event
@@ -103,7 +104,7 @@ async def on_message(message):
                 em.add_field(name="None", value="No matches for " + c + " found.")
             await client.send_message(message.author, embed=em)
         elif content.lower().startswith("epoch") or content.lower().startswith("time") or content.lower.startswith("unix"):
-            em = discord.Embed(title="Current Time", color=discord.Color(randint(0, 16777215)), description=epoch())
+            em = discord.Embed(title="Current Time", description=epoch(), color=discord.Color(randint(0, 16777215)))
             await client.send_message(message.channel, embed=em)
         elif content.lower().strip().startswith("help"):
             em = discord.Embed(title="Help", description="About the available commands", color=color)
