@@ -25,7 +25,7 @@ authorizedList = ["PROS", "Developers", "Admins"]
 
 def epoch():
     seed(str(float(Epoch())))
-    return str(float(Epoch()))
+    return str(float(Epoch())).ljust(20)
 
 @client.event
 async def on_ready():
@@ -120,7 +120,7 @@ async def on_message(message):
                 em.add_field(name=fname, value=fdes + " " + flink, inline=True)
             if len(matches) is 0:
                 em.add_field(name="None", value="No matches for " + c + " found.")
-            await client.send_message(message.author, embed=em)
+            await client.send_message(o, embed=em)
         elif content.lower().startswith("epoch") or content.lower().startswith("time") or content.lower().startswith("unix"):
             em = discord.Embed(title="Current Time", description=epoch(), color=discord.Color(randint(0, 16777215)))
             await client.send_message(o, embed=em)
