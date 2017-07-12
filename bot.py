@@ -21,7 +21,7 @@ tutorial = base + "tutorials/"
 api = base + "api/#"
 data = load()
 
-authorizedList = ["PROS", "Developers", "Admins"]
+authorizedList = ["pros", "developers", "admins"]
 
 def epoch():
     seed(str(float(Epoch())))
@@ -49,12 +49,14 @@ async def on_message(message):
         result = ""
         ment = message.mentions
         o = message.channel
-        print(message.author.roles)
-        if len([x for x in range(len(message.author.roles)) if message.author.roles[x] in authorizedList]) > 0:
-            if len(ment) > 0 and client.user not in ment:
-                o = ment[0]
-            elif len(ment) > 1 and client.user in ment:
-                o = ment[1]
+        try:
+            if len([x for x in range(len(message.author.roles)) if message.author.roles[x].name.lower() in authorizedList]) > 0:
+                if len(ment) > 0 and client.user not in ment:
+                    o = ment[0]
+                elif len(ment) > 1 and client.user in ment:
+                    o = ment[1]
+        except:
+            o = message.channel
         if content.startswith("api "):
             ment = message.mentions
             o = message.channel
@@ -100,7 +102,7 @@ async def on_message(message):
                         await client.send_message(o, embed=em)
         elif content.startswith("tutorial "):
             c = content[9:].strip()
-            result = "<" + tutorial + c + ">"
+            result = tutorial + c
         elif content.startswith("f "):
             if o is message.channel:
                 o = message.author
@@ -135,7 +137,8 @@ async def on_message(message):
             em.add_field(name="help", value="Display this (hopefully helpful) message")
             await client.send_message(o, embed=em)
         if result != None and result != "":
-            await client.send_message(o, result)
+            em = discord.Embed(color=color, description="**" + result + "**")
+            await client.send_message(o, embed=em)
     elif str(message.author.id) == "168643881066299392":
         for i in range(message.content.lower().count("vegan")):
             vegan.add()
