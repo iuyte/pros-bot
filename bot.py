@@ -145,5 +145,4 @@ async def on_message_delete(message):
     if str(message.author.id) is "126080531535364096":
         await client.send_message(message.channel, embed=griffin.repost(message.content))
 
-
 client.run(DISCORD_TOKEN)
