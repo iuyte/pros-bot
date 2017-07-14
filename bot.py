@@ -142,7 +142,8 @@ async def on_message(message):
 
 @client.event
 async def on_message_delete(message):
+    epoch()
     if str(message.author.id) is "126080531535364096":
-        await client.send_message(message.channel, embed=griffin.repost(message.content))
+        await client.send_message(message.channel, embed=griffin.repost(message.content), color=discord.Color(randint(0, 16777215)))
 
 client.run(DISCORD_TOKEN)
