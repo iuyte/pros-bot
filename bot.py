@@ -1,8 +1,5 @@
 #!/usr/bin/python3
-import discord
-import asyncio
-import re
-import vegan
+import discord, asyncio, re, vegan, griffin
 from time import gmtime, strftime, time as Epoch
 from random import randint, seed
 from parseAPI import load
@@ -142,5 +139,11 @@ async def on_message(message):
     elif str(message.author.id) == "168643881066299392":
         for i in range(message.content.lower().count("vegan")):
             vegan.add()
+
+@client.event
+async def on_message_delete(message):
+    if str(message.author.id) is "126080531535364096":
+        await client.send_message(message.channel, embed=griffin.repost(message.content))
+
 
 client.run(DISCORD_TOKEN)
