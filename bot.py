@@ -131,8 +131,19 @@ async def on_message(message):
             em.add_field(name="`api`", value="Use the command `api <function/macro>` to get information on a function or macro.")
             em.add_field(name="`tutorial`", value="Use the command `tutorial <tutorial> to get a link to a PROS tutorial.")
             em.add_field(name="`f`", value="Use `f <regex>` to search the API using a regex for specific functions/macros.")
+            em.add_field(name="`<letter>ing`", value="<letter>ong! `<epoch difference in time it took to send>`")
             em.add_field(name="help", value="Display this (hopefully helpful) message")
             await client.send_message(o, embed=em)
+        elif re.match(".*ing", content.lower().strip(" !.,?;'\"")):
+            title = content.lower().strip(" !.,?;'\"").replace("ing", "ong").title()
+            epoch()
+            tlast = float(Epoch())
+            msg = await client.send_message(message.channel, embed=discord.Embed(title=title))
+            def check(tmsg):
+                return msg.id is tmsg.id
+            # await client.wait_for_message(author=client.user, channel=message.channel, content=msg.content, check=check)
+            tdif = str(float(Epoch()) - tlast)
+            await client.edit_message(msg, new_content="", embed=discord.Embed(title=title, description=tdif, color=discord.Color(randint(0, 16777215))))
         if result != None and result != "":
             em = discord.Embed(color=color, description="**" + result + "**")
             await client.send_message(o, embed=em)
