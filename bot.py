@@ -139,10 +139,10 @@ async def on_message(message):
             epoch()
             tlast = float(Epoch())
             msg = await client.send_message(message.channel, embed=discord.Embed(title=title))
-            def check(tmsg):
-                return msg.id is tmsg.id
             tdif = str(float(Epoch()) - tlast)
             await client.edit_message(msg, new_content="", embed=discord.Embed(title=title, description=tdif, color=discord.Color(randint(0, 16777215))))
+        elif "creator" in content and "not" not in content:
+            result = "<@262949175765762050>"
         if result != None and result != "":
             em = discord.Embed(color=color, description="**" + result + "**")
             await client.send_message(o, embed=em)
