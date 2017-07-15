@@ -135,7 +135,7 @@ async def on_message(message):
             em.add_field(name="help", value="Display this (hopefully helpful) message")
             await client.send_message(o, embed=em)
         elif re.match(".*ing", content.lower().strip(" !.,?;'\"")):
-            title = content.lower().strip(" !.,?;'\"").replace("ing", "ong").title()
+            title = content.lower().strip(" !.,?;'\"").replace("ing", "ong").title() + "!"
             epoch()
             tlast = float(Epoch())
             msg = await client.send_message(message.channel, embed=discord.Embed(title=title))
@@ -153,7 +153,7 @@ async def on_message(message):
 @client.event
 async def on_message_delete(message):
     epoch()
-    if str(message.author.id).startswith("126080531535364096"):
-        await client.send_message(message.channel, embed=griffin.repost(message.content), color=discord.Color(randint(0, 16777215)))
+    if "griffin" in message.author.nick.lower() and "burn" in message.author.nick.lower():
+        await client.send_message(message.channel, embed=griffin.repost(message.content, message.timestamp))
 
 client.run(DISCORD_TOKEN)
