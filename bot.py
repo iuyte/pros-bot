@@ -141,7 +141,6 @@ async def on_message(message):
             msg = await client.send_message(message.channel, embed=discord.Embed(title=title))
             def check(tmsg):
                 return msg.id is tmsg.id
-            # await client.wait_for_message(author=client.user, channel=message.channel, content=msg.content, check=check)
             tdif = str(float(Epoch()) - tlast)
             await client.edit_message(msg, new_content="", embed=discord.Embed(title=title, description=tdif, color=discord.Color(randint(0, 16777215))))
         if result != None and result != "":
@@ -154,7 +153,7 @@ async def on_message(message):
 @client.event
 async def on_message_delete(message):
     epoch()
-    if str(message.author.id) is "126080531535364096":
+    if str(message.author.id).startswith("126080531535364096"):
         await client.send_message(message.channel, embed=griffin.repost(message.content), color=discord.Color(randint(0, 16777215)))
 
 client.run(DISCORD_TOKEN)
