@@ -153,7 +153,7 @@ async def on_message(message):
 @client.event
 async def on_message_delete(message):
     epoch()
-    if "griffin" in message.author.nick.lower() and "burn" in message.author.nick.lower():
+    if "griffin" in message.author.nick.lower() and "burn" in message.author.nick.lower() and False:
         await client.send_message(message.channel, embed=griffin.repost(message.content, message.timestamp))
 
 client.run(DISCORD_TOKEN)
