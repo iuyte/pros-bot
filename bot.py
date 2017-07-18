@@ -134,15 +134,8 @@ async def on_message(message):
             em.add_field(name="`<letter>ing`", value="<letter>ong! `<epoch difference in time it took to send>`")
             em.add_field(name="help", value="Display this (hopefully helpful) message")
             await client.send_message(o, embed=em)
-        elif re.match(".*ing", content.lower().strip(" !.,?;'\"")):
-            title = content.lower().strip(" !.,?;'\"").replace("ing", "ong").title() + "!"
-            epoch()
-            tlast = float(Epoch())
-            msg = await client.send_message(message.channel, embed=discord.Embed(title=title))
-            tdif = str(float(Epoch()) - tlast)
-            await client.edit_message(msg, new_content="", embed=discord.Embed(title=title, description=tdif, color=discord.Color(randint(0, 16777215))))
-        elif re.match(".*ong", content.lower().strip(" !.,?;'\"")):
-            title = content.lower().strip(" !.,?;'\"").replace("ong", "ing").title() + "!"
+        elif re.match(".*ing", content.lower().strip(" !.,?;'\"")) or re.match(".*ong", content.lower().strip(" !.,?;'\"")):
+            title = content.lower().strip(" !.,?;'\"").replace("ing", "fefrfgtrhy78383938228").replace("ong", "ing").replace("fefrfgtrhy78383938228", "ong").title() + "!"
             epoch()
             tlast = float(Epoch())
             msg = await client.send_message(message.channel, embed=discord.Embed(title=title))
