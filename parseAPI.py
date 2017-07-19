@@ -44,15 +44,15 @@ def parse(data):
                         lastr = False
                         while not data[line].startswith(" */"):
                                 if data[line][3:].startswith("@param"):
-                                        params.append(data[line][10:].strip().replace("<code>", "`").replace("</code>", "`").replace("* \\c", "\n   "+u"\u2022 "))
+                                        params.append(data[line][10:].strip().replace("<code>", "`").replace("</code>", "`"))
                                         lastp = True
                                 elif data[line][3:].startswith("@return"):
-                                        returns = data[line][11:].strip()
+                                        returns = data[line][11:].strip().replace("<code>", "`").replace("</code>", "`")
                                         lastr = True
                                 elif lastr:
-                                        returns += " " + data[line][3:]
+                                        returns += " " + data[line][3:].replace("<code>", "`").replace("</code>", "`")
                                 elif lastp:
-                                        params[-1] += " " + data[line][3:]
+                                        params[-1] += " " + data[line][3:].replace("<code>", "`").replace("</code>", "`")
                                 else:
                                         cdef += data[line][3:] + " "
                                 line += 1
