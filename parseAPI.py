@@ -101,7 +101,10 @@ def save():
         with open("api.p", mode="wb") as thata:
                 pickle.dump(data, thata)
         with open("api.json", mode="w") as jsonf:
-                jsonf.write(jsonpickle.encode(data, unpicklable=False));
+                td = {}
+                for d in data:
+                    td[d["access"]] = d
+                jsonf.write(jsonpickle.encode(td, unpicklable=False));
 
 def load():
         data = []
