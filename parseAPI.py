@@ -56,7 +56,7 @@ def parse(data):
                                 else:
                                         cdef += data[line][3:] + " "
                                 line += 1
-                        cdef = cdef.strip()
+                        cdef = cdef.strip().replace("<code>", "`").replace("</code>", "`").replace("* \\c", "\n    ")
                         returns = returns.strip()
                         line += 1
                         continue
