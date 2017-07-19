@@ -8,7 +8,7 @@ def Data(typec, group, name, description, params, extra="", access="", returns="
         elif typec.lower() == "macro":
                 link = "https://pros.cs.purdue.edu/api/#define-"
                 link += "-".join(name.split("(")[0].split("_")).lower() + "-" + extra
-        return {"type": typec, "group": group, "name": name, "description": description, "params": params, "extra": extra, "access": access, "returns": returns, "link": link}
+        return {"typec": typec, "group": group, "name": name, "description": description, "params": params, "extra": extra, "access": access, "returns": returns, "link": link}
 
 def parse(data):
         out = []
