@@ -33,7 +33,7 @@ def parse(data):
                         for character in data[line]:
                                 if character not in "/-":
                                         group += character
-                        group = group.strip().title().replace("<code>", "`").replace("</code>", "`").replace("* \\c", "\n   "+u"\u2022 ")
+                        group = group.strip().title()
                         line += 1
                         continue
                 if data[line].startswith("/**"):
@@ -84,7 +84,7 @@ def parse(data):
                 if rtype == "" or cdef == "" or name == "" or access.strip() in types or access.startswith("int "):
                     line += 1
                     continue
-                out.append(Data(typec, group, name, cdef, params.replace("<code>", "`").replace("</code>", "`").replace("* \\c", "\n   "+u"\u2022 "), rtype, access, returns))
+                out.append(Data(typec, group, name, cdef, params.replace("<code>", "`").replace("</code>", "`"), rtype, access, returns))
                 cdef = ""
                 params = []
                 returns = ""
