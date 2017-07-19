@@ -83,7 +83,7 @@ async def on_message(message):
                             paramm = param.decode('utf-8').split(" ")
                             params += "`" + paramm.pop(0) + "`: " + " ".join(paramm).strip() + "\n"
                     em = discord.Embed(title=g(tdata, "group"), description=link, color=color)
-                    if g(tdata, "typec").lower() == "function":
+                    if g(tdata, "type").lower() == "function":
                         em.add_field(name="Declaration", value="```Cpp\n" + g(tdata, "extra") + " " + g(tdata, "name") + "\n```")
                         if len(g(tdata, "description")) >  1024:
                             tdata[bytes("description", 'utf-8')] = g(tdata, "description")[:1018] + " . . ."
@@ -92,7 +92,7 @@ async def on_message(message):
                             em.add_field(name="Parameters", value=params)
                         if g(tdata, "returns") is not "":
                             em.add_field(name="Returns", value = g(tdata, "returns"))
-                    elif g(tdata, "typec").lower() == "macro":
+                    elif g(tdata, "type").lower() == "macro":
                         em.add_field(name="Declaration", value="```Cpp\n#define " + g(tdata, "name") + " " + g(tdata, "extra") + "\n```")
                         em.add_field(name="Description", value=g(tdata, "description"))
                     if em != None:
@@ -108,7 +108,7 @@ async def on_message(message):
             em = discord.Embed(title="Matches for `" + c + "`", color=color)
             for m in range(len(matches)):
                 fname = "`" + g(matches[m], "extra") + " " + g(matches[m], "name") + "`"
-                if g(matches[m], "typec").lower() == "macro":
+                if g(matches[m], "type").lower() == "macro":
                     fname = "`#define " + g(matches[m], "name") + " " + g(matches[m], "extra") + "`"
                 flink = "*[" +  u"\u279A" + "](" + g(matches[m], "link") + ")*"
                 fdes = ""
