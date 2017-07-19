@@ -65,7 +65,7 @@ def parse(data):
                         vi = data[line].split(" ")
                         name = vi[1].strip()
                         value = vi[2].strip()
-                        out.append(Data(typec, group, name, cdef, params.replace("<code>", "`").replace("</code>", "`").replace("* \\c", "\n   "+u"\u2022 "), value, name.lower()))
+                        out.append(Data(typec, group, name, cdef, params, value, name.lower()))
                         cdef = ""
                         params = ""
                         line += 1
@@ -84,7 +84,7 @@ def parse(data):
                 if rtype == "" or cdef == "" or name == "" or access.strip() in types or access.startswith("int "):
                     line += 1
                     continue
-                out.append(Data(typec, group, name, cdef, params.replace("<code>", "`").replace("</code>", "`"), rtype, access, returns))
+                out.append(Data(typec, group, name, cdef, params, rtype, access, returns))
                 cdef = ""
                 params = []
                 returns = ""
