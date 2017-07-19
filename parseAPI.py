@@ -44,7 +44,7 @@ def parse(data):
                         lastr = False
                         while not data[line].startswith(" */"):
                                 if data[line][3:].startswith("@param"):
-                                        params.append(data[line][10:].strip())
+                                        params.append(data[line][10:].strip().replace("<code>", "`").replace("</code>", "`").replace("* \\c", "\n   "+u"\u2022 "))
                                         lastp = True
                                 elif data[line][3:].startswith("@return"):
                                         returns = data[line][11:].strip()
