@@ -191,7 +191,7 @@ async def on_message_edit(before, message):
             if "vegan" in c:
                 em = discord.Embed(title="Vegan Counter", description="How many times Jess has said 'vegan'", color=color)
                 em.add_field(name="Total Count", value="**[" + str(vegan.count()) + "]()**")
-                await client.edit_message(before, embed=em)
+                await client.edit_message(lastMessage, embed=em)
             else:
                 try:
                     tdata = search(c)[0]
@@ -221,7 +221,7 @@ async def on_message_edit(before, message):
                         em.add_field(name="Declaration", value="```Cpp\n#define " + g(tdata, "name") + " " + g(tdata, "extra") + "\n```")
                         em.add_field(name="Description", value=g(tdata, "description"))
                     if em != None:
-                        await client.edit_message(before, embed=em)
+                        await client.edit_message(lastMessage, embed=em)
         elif content.startswith("tutorial "):
             c = content[9:].strip()
             result = tutorial + c
@@ -244,10 +244,10 @@ async def on_message_edit(before, message):
                 em.add_field(name=fname, value=fdes + " " + flink, inline=True)
             if len(matches) is 0:
                 em.add_field(name="None", value="No matches for " + c + " found.")
-            await client.edit_message(before, embed=em)
+            await client.edit_message(lastMessage, embed=em)
         elif content.lower().startswith("epoch") or content.lower().startswith("time") or content.lower().startswith("unix"):
             em = discord.Embed(title="Current Time", description=epoch(), color=discord.Color(randint(0, 16777215)))
-            await client.edit_message(before, embed=em)
+            await client.edit_message(lastMessage, embed=em)
         elif content.lower().strip().startswith("help"):
             if o is message.channel:
                 o = message.author
@@ -258,19 +258,19 @@ async def on_message_edit(before, message):
             em.add_field(name="`f`", value="Use `f <regex>` to search the API using a regex for specific functions/macros.")
             em.add_field(name="`<letter>ing`", value="<letter>ong! `<epoch difference in time it took to send>`")
             em.add_field(name="help", value="Display this (hopefully helpful) message")
-            await client.edit_message(before, embed=em)
+            await client.edit_message(lastMessage, embed=em)
         elif re.match(".*ing", content.lower().strip(" !.,?;'\"")) or re.match(".*ong", content.lower().strip(" !.,?;'\"")):
             title = content.lower().strip(" !.,?;'\"").replace("ing", "fefrfgtrhy78383938228").replace("ong", "ing").replace("fefrfgtrhy78383938228", "ong").title() + "!"
             epoch()
             tlast = float(Epoch())
-            msg = await client.edit_message(before, embed=discord.Embed(title=title))
+            msg = await client.edit_message(lastMessage, embed=discord.Embed(title=title))
             tdif = str(float(Epoch()) - tlast)
             await client.edit_message(msg, new_content="", embed=discord.Embed(title=title, description=tdif, color=discord.Color(randint(0, 16777215))))
         elif "creator" in content and "not" not in content:
             result = "<@262949175765762050>"
         if result != None and result != "":
             em = discord.Embed(color=color, description="**" + result + "**")
-            await client.edit_message(before, embed=em)
+            await client.edit_message(lastMessage, embed=em)
 
 
 client.run(DISCORD_TOKEN)
