@@ -169,7 +169,7 @@ async def handle_message(message, edited=False):
                 await client.edit_message(lastMessage, embed=em)
             else:
                 lastMessage = await client.send_message(o, embed=em)
-        elif re.match(".*ing", content.lower().strip(" !.,?;'\"")) or re.match(".*ong", content.lower().strip(" !.,?;'\"")):
+        elif re.match("ping.*", content.lower().strip(" !.,?;'\"")) or re.match("pong.*", content.lower().strip(" !.,?;'\"")):
             title = content.lower().strip(" !.,?;'\"").replace("ing", "fefrfgtrhy78383938228").replace("ong", "ing").replace("fefrfgtrhy78383938228", "ong").title() + "!"
             epoch()
             tlast = float(Epoch())
