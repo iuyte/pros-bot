@@ -117,7 +117,7 @@ async def handle_message(message, edited=False):
         elif content.startswith("tutorial "):
             c = content[9:].strip()
             url = tutorial + c
-            if requests.get(url) == 404:
+            if requests.get(url).status_code == 404:
                 result = "Tutorial not found"
             else:
                 result = url
