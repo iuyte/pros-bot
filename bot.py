@@ -135,7 +135,7 @@ async def on_message(message):
             em.add_field(name="`<letter>ing`", value="<letter>ong! `<epoch difference in time it took to send>`")
             em.add_field(name="help", value="Display this (hopefully helpful) message")
             lastMessage = await client.send_message(o, embed=em)
-        elif re.match(".*ing", content.lower().strip(" !.,?;'\"")) or re.match(".*ong", content.lower().strip(" !.,?;'\"")):
+        elif re.match("ping.*", content.lower().strip(" !.,?;'\"")) or re.match("pong.*", content.lower().strip(" !.,?;'\"")):
             title = content.lower().strip(" !.,?;'\"").replace("ing", "fefrfgtrhy78383938228").replace("ong", "ing").replace("fefrfgtrhy78383938228", "ong").title() + "!"
             epoch()
             tlast = float(Epoch())
