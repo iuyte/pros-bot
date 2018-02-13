@@ -63,9 +63,9 @@ def parse(data):
                         continue
                 if data[line].startswith("#define "):
                         typec = "Macro"
-                        vi = data[line].split(" ")
-                        name = vi[1].strip()
-                        value = vi[2].strip()
+                        vi = data[line][len("#define "):]
+                        name = vi.split(" ")[0]
+                        value = vi[len(name)+1:]
                         out.append(Data(typec, group, name, cdef, params, value, name.lower()))
                         cdef = ""
                         params = ""
