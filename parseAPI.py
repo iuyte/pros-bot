@@ -1,6 +1,7 @@
 import umsgpack as pickle
 import jsonpickle
 
+
 def Data(typec, group, name, description, params, extra="", access="", returns=""):
         link = ""
         if typec.lower() == "function":
@@ -8,7 +9,9 @@ def Data(typec, group, name, description, params, extra="", access="", returns="
         elif typec.lower() == "macro":
                 link = "https://pros.cs.purdue.edu/api/#define-"
                 link += "-".join(name.split("(")[0].split("_")).lower() + "-" + extra
-        return {"typec": typec, "group": group, "name": name, "description": description, "params": params, "extra": extra, "access": access, "returns": returns, "link": link}
+        return {"typec": typec, "group": group, "name": name, "description": description, "params": params,
+                "extra": extra, "access": access, "returns": returns, "link": link}
+
 
 def parse(data):
         out = []
@@ -17,7 +20,9 @@ def parse(data):
         cdef = ""
         params = []
         returns = ""
-        types = ["typedef void *", "TaskHandle", "bool", "unsigned long", "unsigned int", "Encoder", "Gyro", "Ultrasonic", "typedef", "FILE*", "char*", "char", "FILE *", "FILE", "size_t", "long int", "void *", "void*", "Semaphore", "Mutex", "void", "int", "PROS_FILE*", "PROS_FILE *", "PROS_FILE"]
+        types = ["typedef void *", "TaskHandle", "bool", "unsigned long", "unsigned int", "Encoder", "Gyro",
+                 "Ultrasonic", "typedef", "FILE*", "char*", "char", "FILE *", "FILE", "size_t", "long int", "void *",
+                 "void*", "Semaphore", "Mutex", "void", "int", "PROS_FILE*", "PROS_FILE *", "PROS_FILE"]
         skip = ["#if", "#end", "}", "\n"]
         while line < len(data):
             try:
@@ -44,7 +49,8 @@ def parse(data):
                         lastr = False
                         while not data[line].startswith(" */"):
                                 if data[line][3:].startswith("@param"):
-                                        params.append(data[line][10:].strip().replace("<code>", "`").replace("</code>", "`"))
+                                        params.append(data[line][10:].strip().replace("<code>", "`").
+                                                      replace("</code>", "`"))
                                         lastp = True
                                 elif data[line][3:].startswith("@return"):
                                         returns = data[line][11:].strip().replace("<code>", "`").replace("</code>", "`")
@@ -95,6 +101,7 @@ def parse(data):
                 print("Error on line ", line)
         return out
 
+
 def save():
         data = []
         with open("API.h", mode="r") as theta:
@@ -104,17 +111,20 @@ def save():
         with open("api.json", mode="w") as jsonf:
                 jsonf.write(jsonpickle.encode(data, unpicklable=False));
 
+
 def load():
         data = []
         with open("api.p", mode="rb") as p:
                 data = pickle.load(p)
         return data
 
+
 def gData(data, key):
     key = bytes(key, 'utf-8')
     if type(data[key]) is bytes:
         return data[key].decode('utf-8')
     return data[key]
+
 
 if __name__ == "__main__":
         save()

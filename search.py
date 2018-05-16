@@ -2,8 +2,9 @@ import re
 from parseAPI import load
 from parseAPI import gData as g
 
-def reContains(regex, string):
+def re_contains(regex, string):
     return bool(re.search(regex, string))
+
 
 def search(regex):
     matches = []

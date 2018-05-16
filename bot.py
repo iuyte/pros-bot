@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python3.6
 from random import randint, seed
 from time import gmtime, strftime, time as Epoch
 
@@ -11,12 +11,12 @@ from search import *
 
 with open('../pros_token.txt', 'r') as discord_file:
     DISCORD_TOKEN = discord_file.read().split(";")[0]
-print(DISCORD_TOKEN, end=';\n')
+print(DISCORD_TOKEN, ";")
 
 prefix = "$"
 client = discord.Client()
 color = discord.Color(15452014)
-base = "https://pros.cs.purdue.edu/"
+base = "https://pros.cs.purdue.edu/cortex/"
 tutorial = base + "tutorials/"
 api = base + "api/#"
 data = load()
@@ -41,7 +41,7 @@ async def on_ready():
 
 
 async def handle_message(message, edited=False):
-    global data, prefix, client, base, tutorial, api, foo
+    global data, prefix, client, base, tutorial, api
     if not edited:
         global lastMessage
     if len(message.content) <= 0:
